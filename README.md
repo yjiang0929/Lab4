@@ -1,7 +1,7 @@
 # Lab4
 Repository for Comp Arch Lab4
 
-# Work Plan
+## Work Plan
 We are planning on making a multi-cycle CPU for lab 4. 
 
 Deliverables:
