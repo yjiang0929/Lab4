@@ -13,7 +13,7 @@ module cpu(
 );
 
 	wire [31:0] Da, Db, Dw, dmOut, IorDout, regOutClk, aluRes, signImm, srcA, srcB, nextPc;
-	wire zeroFlag pcEnable, beqFlag;
+	wire zeroFlag, pcEnable, beqFlag;
 
 
   //DFFs
@@ -43,7 +43,7 @@ module cpu(
 
 
 	// These are driven by the decoder
-	wire PCWE, MemWE, IRWrite, RegWE, Branch, BEQSel, IorD, ALUSrcA, PCSrc, PCWE;
+	wire PCWE, MemWE, IRWrite, RegWE, Branch, BEQSel, IorD, ALUSrcA, PCSrc;
   wire[1:0] RegDest, MemToReg, ALUSrcB;
   wire[2:0] ALUOP;
   //Mux controllers
@@ -52,9 +52,9 @@ module cpu(
 
   wire [4:0] regIn1, regIn2, regIn3;
 
-  regIn2 <= instructionClk[20:16];
+  assign regIn2 = instructionClk[20:16];
 
-  fsm fsm(.clk(clk), .opcode(instructionClk[31:26]), .funct(instructionClk[5:0]), .PCWE(PCWE), .IorD(IorD), .MemWE(MemWE), 
+  fsm fsm(.clk(clk), .opcode(instructionClk[31:26]), .funct(instructionClk[5:0]), .PCWE(PCWE), .IorD(IorD), .MemWE(MemWE),
     .IRWrite(IRWrite), .RegSr(RegSrc), .RegWE(RegWE), .ALUSrcA(ALUSrcA), .Branch(Branch), .BEQSel(BEQSel),
     .ALUOP(ALUOP), .RegDest(RegDest), .MemToReg(MemToReg), .ALUSrcB(ALUSrcB), .PCSrc(PCSrc));
 
@@ -68,27 +68,30 @@ module cpu(
 
   mux3 memToRegmux(.in1(aluClk), .in2(dataClk), .in3(aluRes), .out(Dw), .select(MemToReg)); //aluRES = pc + 4
 
-  regfile rf(.ReadData1(Da), .ReadData2(Db), .WriteData(Dw), .ReadRegister1(regIn1), .ReadRegister2(regIn2), .WriteRegister(regIn3); .regWrite(RegWE), .clk(clk));
+  regfile rf(.ReadData1(Da), .ReadData2(Db), .WriteData(Dw), .ReadRegister1(regIn1), .ReadRegister2(regIn2), .WriteRegister(regIn3), .regWrite(RegWE), .clk(clk));
 
   mux2 aluSrcAmux(.in1(pc), .in2(daClk), .out(srcA), .select(ALUSrcA));
 
   signExt se(.in(instructionClk[15:0]), .out(signImm));
 
-  wire [31:0] shiftSignImm <= {signImm[29:0], 2'b0};
+  wire [31:0] shiftSignImm;
+  assign shiftSignImm = {signImm[29:0], 2'b0};
 
   mux4 aluSrcBmux(.in1(dbClk), .in2(32'd4), .in3(signImm), .in4(shiftSignImm), .out(srcB), .select(ALUSrcB));
 
-  alu alu(.result(aluRes), _, .zero(zeroFlag), _, .operandA(srcA), .operandB(srcB), .command(ALUOP));
+  alu alu(.result(aluRes), .zero(zeroFlag), .operandA(srcA), .operandB(srcB), .command(ALUOP));
 
-  wire[31:0] concatInstruct <= {pc[31:28], instructionClk[25:0], 2'b0};
+  wire[31:0] concatInstruct;
+  assign concatInstruct = {pc[31:28], instructionClk[25:0], 2'b0};
 
   mux4 pcSrcmux(.in1(aluRes), .in2(aluClk), .in3(concatInstruct), .in4(daClk), .out(nextPc), .select(PCSrc));
 
   mux2 #(1) beqSelmux(.in1(zeroFlag), .in2(!zeroFlag), .out(beqFlag), .select(BEQSel));
 
-  wire temp = and(beqFlag, Branch);
+  wire temp;
+  and and1(temp, beqFlag, Branch);
 
-  pcEnable = or(temp, PCWE);
+  or or1(pcEnable, temp, PCWE);
 
 
 

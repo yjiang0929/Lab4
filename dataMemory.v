@@ -8,7 +8,7 @@ module dataMemory
   input clk, regWE, // On rising edge, iff regWE, writes data to register
   input[9:0] dataAddr,
   input[31:0] dataIn,
-  output[31:0]  dataOut,
+  output[31:0]  dataOut
 );
 
   reg [31:0] mem[1023:0]; // The actual memory

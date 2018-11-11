@@ -37,6 +37,6 @@ module mux4 // 3 inputs of adjustable width, 2 address pins
 	input [1:0] select // Address
 );
 
-	assign out = (select[1] ? (select[0] ? in4 : in3) : (select[0] ? in2 : in1))
+	assign out = (select[1] ? (select[0] ? in4 : in3) : (select[0] ? in2 : in1));
 
 endmodule
