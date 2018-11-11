@@ -16,8 +16,8 @@ input opcode,
 input funct,
 output reg PCWE, IorD, MemWE, IRWrite, RegSr,
 output reg RegWE, ALUSrcA, Branch, BEQSel,
-output [2:0] reg ALUOP,
-output [1:0] reg RegDest, MemToReg, ALUSrcB, PCSrc
+output reg [2:0] ALUOP,
+output reg [1:0] RegDest, MemToReg, ALUSrcB, PCSrc
 );
 // state constants
 parameter Fetch = 5'd0;
@@ -67,7 +67,7 @@ begin
     Decode : begin
       if (opcode == 6'h23 || opcode == 6'h2b) begin //lw +sw
         state <= MemAddr;
-      end else if (opcode == 6'h0) && (funct == 6'h20 || funct == 6'h22 || funct == 6'h2a) begin //r
+      end else if (opcode == 6'h0 && (funct == 6'h20 || funct == 6'h22 || funct == 6'h2a)) begin //r
         state <= Execute;
       end else if (opcode == 6'h5) begin //bne
         state <= BNE;
@@ -79,7 +79,7 @@ begin
         state <= Jump;
       end else if (opcode == 0 && funct == 6'h8) begin //jr
         state <= JR;
-      end else if (opcode 6'h3) begin //jal
+      end else if (opcode == 6'h3) begin //jal
         state <= JALWriteBack;
       end
       PCWE <= 0;
