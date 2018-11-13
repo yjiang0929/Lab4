@@ -60,7 +60,7 @@ module cpu(
 
   mux2 iOrDmux(.in1(pc), .in2(aluClk), .out(IorDout), .select(IorD));
 
-  dataMemory dm(.clk(clk), .regWE(MemWE), .dataAddr(IorDout), .dataIn(dbClk), .dataOut(dmOut));
+  dataMemory dm(.clk(clk), .regWE(MemWE), .dataAddr(IorDout[9:0]), .dataIn(dbClk), .dataOut(dmOut));
 
   mux2 #(5) regSRCmux(.in1(5'b11111), .in2(instructionClk[25:21]), .out(regIn1), .select(RegSrc));
 
