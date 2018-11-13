@@ -76,7 +76,7 @@ always #100 clk=!clk;
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test0 is X");
+      $display("Test (hanoi) is X");
       dutpassed = 0;
       end
     end
@@ -87,7 +87,7 @@ always #100 clk=!clk;
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test1 is X");
+      $display("Test (fib) is X");
       dutpassed = 0;
       end
     end
@@ -97,7 +97,7 @@ always #100 clk=!clk;
       dutpassed = 0;
       end
       if(dut.rf.reg8.qout===32'bX) begin
-      $display("Test2 is X");
+      $display("Test (yeet) is X");
       dutpassed = 0;
       end
     end
@@ -107,7 +107,7 @@ always #100 clk=!clk;
       dutpassed = 0;
       end
       if(dut.rf.reg8.qout===32'bX) begin
-      $display("Test3 is X");
+      $display("Test (test_1) is X");
       dutpassed = 0;
       end
     end
@@ -117,7 +117,7 @@ always #100 clk=!clk;
       dutpassed = 0;
       end
       if(dut.rf.reg11.qout===32'bX) begin
-      $display("Test4 is X");
+      $display("Test (test_3) is X");
       dutpassed = 0;
       end
     end
@@ -127,67 +127,67 @@ always #100 clk=!clk;
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test5 is X");
+      $display("Test (slt) is X");
       dutpassed = 0;
       end
     end
     if(test_num== 6) begin
       if(dut.rf.reg2.qout != branch_test) begin
-      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: branch_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test6 is X");
+      $display("Test (branch_test) is X");
       dutpassed = 0;
       end
     end
     if(test_num== 7) begin
       if(dut.rf.reg2.qout != jump_test) begin
-      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: jump_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test6 is X");
+      $display("Test (jump_test) is X");
       dutpassed = 0;
       end
     end
     if(test_num== 8) begin
       if(dut.rf.reg2.qout != simple_sl) begin
-      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: simple_sl answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test6 is X");
+      $display("Test (simple_sl) is X");
       dutpassed = 0;
       end
     end
     if(test_num== 9) begin
       if(dut.rf.reg2.qout != simple_test) begin
-      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: simple_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test6 is X");
+      $display("Test (simple_test) is X");
       dutpassed = 0;
       end
     end
     if(test_num== 10) begin
       if(dut.rf.reg2.qout != slt_test) begin
-      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: slt_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test6 is X");
+      $display("Test (slt_test) is X");
       dutpassed = 0;
       end
     end
     if(test_num== 11) begin
       if(dut.rf.reg2.qout != sw_test) begin
-      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: sw_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
-      $display("Test6 is X");
+      $display("Test (sw_test) is X");
       dutpassed = 0;
       end
     end
