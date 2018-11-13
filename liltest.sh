@@ -20,6 +20,9 @@ files=("branch_test"\
         "slt_test"\
         "sw_test")
 
+iverilog -o cputest cpu.t.v
+
+
 #Loop through the files
 for i in "${files[@]}"
 do
