@@ -48,21 +48,25 @@ begin
   end
   case(state)
     Fetch : begin
-      state <= Decode;
-      PCWE <= 1;
-      IorD <= 0;
-      MemWE <= 0;
-      IRWrite <= 1;
-      RegDest <= 2'd0;
-      RegSr <= 1;
-      MemToReg <= 2'd0;
-      RegWE <= 0;
-      ALUSrcA <= 0;
-      ALUSrcB <= 2'd1;
-      ALUOP <= `ADD;
-      PCSrc <= 2'd0;
-      Branch <= 0;
-      BEQSel <= 0;
+      if (opcode === 6'dx) begin
+        state <= Fetch;
+      end else begin
+        state <= Decode;
+        PCWE <= 1;
+        IorD <= 0;
+        MemWE <= 0;
+        IRWrite <= 1;
+        RegDest <= 2'd0;
+        RegSr <= 1;
+        MemToReg <= 2'd0;
+        RegWE <= 0;
+        ALUSrcA <= 0;
+        ALUSrcB <= 2'd1;
+        ALUOP <= `ADD;
+        PCSrc <= 2'd0;
+        Branch <= 0;
+        BEQSel <= 0;
+      end
     end
     Decode : begin
       if (opcode == 6'h23 || opcode == 6'h2b) begin //lw +sw
