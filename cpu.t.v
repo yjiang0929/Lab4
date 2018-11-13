@@ -1,6 +1,6 @@
 // `timescale 1 ns / 1 ps
 `include "cpu.v"
-`define DELAY 5000
+`define DELAY 10000
 
 module testCPU();
   reg clk; //Declare clock
