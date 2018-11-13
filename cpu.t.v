@@ -28,7 +28,8 @@ module testCPU();
 
 //Set up clock
 initial clk = 0;
-always #10 clk=!clk;
+
+always #1000 clk=!clk;
 
 //Read in the memory location
   initial begin
@@ -67,11 +68,19 @@ always #10 clk=!clk;
       $display("Test failed: Tower of Hanoi answer unexpected; expected %b but got %b", hanoi, dut.rf.reg2.qout);
       dutpassed = 0;
       end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test0 is X");
+      dutpassed = 0;
+      end
     end
 
     if(test_num == 1) begin //If we're test 1, check against fibinacci
       if(dut.rf.reg2.qout != fib) begin
       $display("Test failed: Fibinacci answer unexpected; expected %b but got %b", fib, dut.rf.reg2.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test1 is X");
       dutpassed = 0;
       end
     end
@@ -80,10 +89,18 @@ always #10 clk=!clk;
       $display("Test failed: Yeet answer unexpected; expected %b but got %b", yeet, dut.rf.reg8.qout);
       dutpassed = 0;
       end
+      if(dut.rf.reg8.qout===32'bX) begin
+      $display("Test2 is X");
+      dutpassed = 0;
+      end
     end
     if(test_num == 3) begin //If we're test 3, check against test_1
       if(dut.rf.reg8.qout != test_1) begin
       $display("Test failed: test_1 answer unexpected; expected %b but got %b", test_1, dut.rf.reg8.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg8.qout===32'bX) begin
+      $display("Test3 is X");
       dutpassed = 0;
       end
     end
@@ -92,16 +109,28 @@ always #10 clk=!clk;
       $display("Test failed: test_3 answer unexpected; expected %b but got %b", test_3, dut.rf.reg11.qout);
       dutpassed = 0;
       end
+      if(dut.rf.reg11.qout===32'bX) begin
+      $display("Test4 is X");
+      dutpassed = 0;
+      end
     end
     if(test_num == 5) begin //If we're test 5, check against slt
       if(dut.rf.reg2.qout != slt) begin
       $display("Test failed: Slt answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test5 is X");
+      dutpassed = 0;
+      end
     end
     if(test_num== 6) begin
       if(dut.rf.reg2.qout != add) begin
       $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test6 is X");
       dutpassed = 0;
       end
 
