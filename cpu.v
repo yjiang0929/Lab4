@@ -23,7 +23,7 @@ module cpu(
 
   reg[31:0] instructionClk;
   initial instructionClk <= 0;
-  always @(posedge clk) instructionClk <= dmOut;
+  always @(posedge clk) if (IRWrite) begin instructionClk <= dmOut; end
 
   reg[31:0] dataClk;
   initial dataClk <= 0;
