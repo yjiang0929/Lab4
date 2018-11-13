@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Defining the constant parts of the strings throughout all calls
-base="asmtest/"
+base="asmtest/bleep_vim/simple/"
 post=".text.hex"
 outfile="cpuout"
 outfileEnd=".vcd"
@@ -13,8 +13,12 @@ callThree=" +file_out="
 test_num=6
 
 #Create unique data memory instantiation
-files=("bleep_vim/simple/simple_test")
-
+files=("branch_test"\
+        "jump_test"\
+        "simple_sl"\
+        "simple_test"\
+        "slt_test"\
+        "sw_test")
 
 #Loop through the files
 for i in "${files[@]}"
@@ -24,7 +28,7 @@ do
   output="$callThree$outfile$test_num$outfileEnd" #Creates vcdout part of call
   fullcall="$call$full$callTwo$test_num$output" #puts everything together
   #Make the call
-  ./test $fullcall
+  ./cputest $fullcall
   #Print the call so you can see what they look like (commented for neatness)
   # echo $fullcall
   #Increment the test number

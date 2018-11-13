@@ -16,7 +16,13 @@ module testCPU();
   wire[31:0] test_1 = 32'hf; //test 3
   wire[31:0] test_3 = 32'd42; //test 4
   wire[31:0] slt = 32'd1; //test 5
-  wire[31:0] add = 32'd4; //test 6
+
+  wire[31:0] branch_test = 32'd4; //test 6
+  wire[31:0] jump_test = 32'd8; //test 7
+  wire[31:0] simple_sl = 32'd3; //test 8
+  wire[31:0] simple_test = 32'd4; //test 9
+  wire[31:0] slt_test = 32'd1; //test 10
+  wire[31:0] sw_test = 32'd13; //test 11
 
   //Instantiate dut
   cpu dut(.clk(clk));
@@ -29,7 +35,7 @@ module testCPU();
 //Set up clock
 initial clk = 0;
 
-always #1000 clk=!clk;
+always #100 clk=!clk;
 
 //Read in the memory location
   initial begin
@@ -55,7 +61,7 @@ always #1000 clk=!clk;
     $dumpfile(file_out);
     $dumpvars();
 
-    $display("Starting test number (in binary): %b", test_num);
+    $display("Starting test number (in binary): %b or %d", test_num, test_num);
 
 
     //Note beginning of test
@@ -125,7 +131,7 @@ always #1000 clk=!clk;
       end
     end
     if(test_num== 6) begin
-      if(dut.rf.reg2.qout != add) begin
+      if(dut.rf.reg2.qout != branch_test) begin
       $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
       dutpassed = 0;
       end
@@ -133,7 +139,56 @@ always #1000 clk=!clk;
       $display("Test6 is X");
       dutpassed = 0;
       end
-
+    end
+    if(test_num== 7) begin
+      if(dut.rf.reg2.qout != jump_test) begin
+      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test6 is X");
+      dutpassed = 0;
+      end
+    end
+    if(test_num== 8) begin
+      if(dut.rf.reg2.qout != simple_sl) begin
+      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test6 is X");
+      dutpassed = 0;
+      end
+    end
+    if(test_num== 9) begin
+      if(dut.rf.reg2.qout != simple_test) begin
+      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test6 is X");
+      dutpassed = 0;
+      end
+    end
+    if(test_num== 10) begin
+      if(dut.rf.reg2.qout != slt_test) begin
+      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test6 is X");
+      dutpassed = 0;
+      end
+    end
+    if(test_num== 11) begin
+      if(dut.rf.reg2.qout != sw_test) begin
+      $display("Test failed: Add answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      dutpassed = 0;
+      end
+      if(dut.rf.reg2.qout===32'bX) begin
+      $display("Test6 is X");
+      dutpassed = 0;
+      end
     end
 
     //Note if the device under test passed
