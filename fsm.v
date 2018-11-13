@@ -39,6 +39,7 @@ parameter JALJump = 5'd15;
 
 // state variables
 reg[4:0] state;
+reg count;
 
 // map state to output
 always @ (posedge clk)
@@ -50,12 +51,10 @@ begin
     Fetch : begin
       if (opcode === 6'dx) begin
         state <= Fetch;
-      end else begin
-        state <= Decode;
         PCWE <= 1;
         IorD <= 0;
         MemWE <= 0;
-        IRWrite <= 1;
+        IRWrite <= 0;
         RegDest <= 2'd0;
         RegSr <= 1;
         MemToReg <= 2'd0;
@@ -66,81 +65,223 @@ begin
         PCSrc <= 2'd0;
         Branch <= 0;
         BEQSel <= 0;
+        count <= 0;
+      end else begin
+        state <= Decode;
+        PCWE <= 0;
+        IorD <= 0;
+        MemWE <= 0;
+        IRWrite <= 1;
+        RegDest <= 2'd0;
+        RegSr <= 1;
+        MemToReg <= 2'd0;
+        RegWE <= 0;
+        ALUSrcA <= 0;
+        ALUSrcB <= 2'd3;
+        ALUOP <= `ADD;
+        PCSrc <= 2'd0;
+        Branch <= 0;
+        BEQSel <= 0;
+        count <= 0;
       end
     end
     Decode : begin
-      if (opcode == 6'h23 || opcode == 6'h2b) begin //lw +sw
-        state <= MemAddr;
-      end else if (opcode == 6'h0 && (funct == 6'h20 || funct == 6'h22 || funct == 6'h2a)) begin //r
-        state <= Execute;
-      end else if (opcode == 6'h5) begin //bne
-        state <= BNE;
-      end else if (opcode == 6'h4) begin //beq
-        state <= BEQ;
-      end else if (opcode == 6'h8) begin //addi
-        state <= ADDIExecute;
-      end else if (opcode == 6'h2) begin //jump
-        state <= Jump;
-      end else if (opcode == 0 && funct == 6'h8) begin //jr
-        state <= JR;
-      end else if (opcode == 6'h3) begin //jal
-        state <= JALWriteBack;
+      if (count == 0) begin
+        state <= Decode;
+        PCWE <= 0;
+        IorD <= 0;
+        MemWE <= 0;
+        IRWrite <= 1;
+        RegDest <= 2'd0;
+        RegSr <= 1;
+        MemToReg <= 2'd0;
+        RegWE <= 0;
+        ALUSrcA <= 0;
+        ALUSrcB <= 2'd3;
+        ALUOP <= `ADD;
+        PCSrc <= 2'd0;
+        Branch <= 0;
+        BEQSel <= 0;
+        count <= 1;
+      end else begin
+        if (opcode == 6'h23 || opcode == 6'h2b) begin //lw +sw
+          state <= MemAddr;
+          PCWE <= 0;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd0;
+          RegSr <= 1;
+          MemToReg <= 2'd0;
+          RegWE <= 0;
+          ALUSrcA <= 1;
+          ALUSrcB <= 2'd2;
+          ALUOP <= `ADD;
+          PCSrc <= 2'd0;
+          Branch <= 0;
+          BEQSel <= 0;
+        end else if (opcode == 6'h0 && (funct == 6'h20 || funct == 6'h22 || funct == 6'h2a)) begin //r
+          state <= Execute;
+          PCWE <= 0;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd0;
+          RegSr <= 1;
+          MemToReg <= 2'd0;
+          RegWE <= 0;
+          ALUSrcA <= 1;
+          ALUSrcB <= 2'd0;
+          if (funct == 6'h20) begin //add
+            ALUOP <= `ADD;
+          end else if (funct == 6'h22) begin //sub
+            ALUOP <= `SUB;
+          end else if (funct == 6'h2a) begin //slt
+            ALUOP <= `SLT;
+          end
+          PCSrc <= 2'd0;
+          Branch <= 0;
+          BEQSel <= 0;
+        end else if (opcode == 6'h5) begin //bne
+          state <= BNE;
+          PCWE <= 0;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd0;
+          RegSr <= 1;
+          MemToReg <= 2'd0;
+          RegWE <= 0;
+          ALUSrcA <= 1;
+          ALUSrcB <= 2'd0;
+          ALUOP <= `SUB;
+          PCSrc <= 2'd1;
+          Branch <= 1;
+          BEQSel <= 1;
+        end else if (opcode == 6'h4) begin //beq
+          state <= BEQ;
+          PCWE <= 0;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd0;
+          RegSr <= 1;
+          MemToReg <= 2'd0;
+          RegWE <= 0;
+          ALUSrcA <= 1;
+          ALUSrcB <= 2'd0;
+          ALUOP <= `SUB;
+          PCSrc <= 2'd1;
+          Branch <= 1;
+          BEQSel <= 0;
+        end else if (opcode == 6'h8) begin //addi
+          state <= ADDIExecute;
+          PCWE <= 0;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd0;
+          RegSr <= 1;
+          MemToReg <= 2'd0;
+          RegWE <= 0;
+          ALUSrcA <= 1;
+          ALUSrcB <= 2'd2;
+          if (opcode == 6'h8) begin
+            ALUOP <= `ADD;
+          end else if (opcode == 6'he) begin
+            ALUOP <= `XOR;
+          end
+          PCSrc <= 2'd0;
+          Branch <= 0;
+          BEQSel <= 0;
+        end else if (opcode == 6'h2) begin //jump
+          state <= Jump;
+          PCWE <= 1;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd0;
+          RegSr <= 1;
+          MemToReg <= 2'd0;
+          RegWE <= 0;
+          ALUSrcA <= 0;
+          ALUSrcB <= 2'd0;
+          ALUOP <= `ADD;
+          PCSrc <= 2'd2;
+          Branch <= 0;
+          BEQSel <= 0;
+        end else if (opcode == 0 && funct == 6'h8) begin //jr
+          state <= JR;
+          PCWE <= 1;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd0;
+          RegSr <= 0;
+          MemToReg <= 2'd0;
+          RegWE <= 0;
+          ALUSrcA <= 0;
+          ALUSrcB <= 2'd0;
+          ALUOP <= `ADD;
+          PCSrc <= 2'd3;
+          Branch <= 0;
+          BEQSel <= 0;
+        end else if (opcode == 6'h3) begin //jal
+          state <= JALWriteBack;
+          PCWE <= 0;
+          IorD <= 0;
+          MemWE <= 0;
+          IRWrite <= 0;
+          RegDest <= 2'd2;
+          RegSr <= 1;
+          MemToReg <= 2'd2;
+          RegWE <= 1;
+          ALUSrcA <= 0;
+          ALUSrcB <= 2'd0;
+          ALUOP <= `ADD;
+          PCSrc <= 2'd0;
+          Branch <= 0;
+          BEQSel <= 0;
+        end
       end
-      PCWE <= 0;
-      IorD <= 0;
-      MemWE <= 0;
-      IRWrite <= 0;
-      RegDest <= 2'd0;
-      RegSr <= 1;
-      MemToReg <= 2'd0;
-      RegWE <= 0;
-      ALUSrcA <= 0;
-      ALUSrcB <= 2'd3;
-      ALUOP <= `ADD;
-      PCSrc <= 2'd0;
-      Branch <= 0;
-      BEQSel <= 0;
     end
     MemAddr : begin
       if (opcode == 6'h23) begin //lw
         state <= MemRead;
+        PCWE <= 0;
+        IorD <= 1;
+        MemWE <= 0;
+        IRWrite <= 0;
+        RegDest <= 2'd0;
+        RegSr <= 1;
+        MemToReg <= 2'd0;
+        RegWE <= 0;
+        ALUSrcA <= 0;
+        ALUSrcB <= 2'd0;
+        ALUOP <= `ADD;
+        PCSrc <= 2'd0;
+        Branch <= 0;
+        BEQSel <= 0;
       end else begin
         state <= MemWrite;
+        PCWE <= 0;
+        IorD <= 1;
+        MemWE <= 1;
+        IRWrite <= 0;
+        RegDest <= 2'd0;
+        RegSr <= 1;
+        MemToReg <= 2'd0;
+        RegWE <= 0;
+        ALUSrcA <= 0;
+        ALUSrcB <= 2'd0;
+        ALUOP <= `ADD;
+        PCSrc <= 2'd0;
+        Branch <= 0;
+        BEQSel <= 0;
       end
-      PCWE <= 0;
-      IorD <= 0;
-      MemWE <= 0;
-      IRWrite <= 0;
-      RegDest <= 2'd0;
-      RegSr <= 1;
-      MemToReg <= 2'd0;
-      RegWE <= 0;
-      ALUSrcA <= 1;
-      ALUSrcB <= 2'd2;
-      ALUOP <= `ADD;
-      PCSrc <= 2'd0;
-      Branch <= 0;
-      BEQSel <= 0;
     end
     MemRead : begin
       state <= MemWriteBack;
-      PCWE <= 0;
-      IorD <= 1;
-      MemWE <= 0;
-      IRWrite <= 0;
-      RegDest <= 2'd0;
-      RegSr <= 1;
-      MemToReg <= 2'd0;
-      RegWE <= 0;
-      ALUSrcA <= 0;
-      ALUSrcB <= 2'd0;
-      ALUOP <= `ADD;
-      PCSrc <= 2'd0;
-      Branch <= 0;
-      BEQSel <= 0;
-    end
-    MemWriteBack: begin
-      state <= Fetch;
       PCWE <= 0;
       IorD <= 0;
       MemWE <= 0;
@@ -156,48 +297,44 @@ begin
       Branch <= 0;
       BEQSel <= 0;
     end
-    MemWrite : begin
+    MemWriteBack: begin
       state <= Fetch;
-      PCWE <= 0;
-      IorD <= 1;
-      MemWE <= 1;
-      IRWrite <= 0;
+      PCWE <= 1;
+      IorD <= 0;
+      MemWE <= 0;
+      IRWrite <= 1;
       RegDest <= 2'd0;
       RegSr <= 1;
       MemToReg <= 2'd0;
       RegWE <= 0;
       ALUSrcA <= 0;
-      ALUSrcB <= 2'd0;
+      ALUSrcB <= 2'd1;
       ALUOP <= `ADD;
       PCSrc <= 2'd0;
       Branch <= 0;
       BEQSel <= 0;
+      count <= 0;
     end
-    Execute : begin
-      state <= ALUWriteBack;
-      PCWE <= 0;
+    MemWrite : begin
+      state <= Fetch;
+      PCWE <= 1;
       IorD <= 0;
       MemWE <= 0;
-      IRWrite <= 0;
+      IRWrite <= 1;
       RegDest <= 2'd0;
       RegSr <= 1;
       MemToReg <= 2'd0;
       RegWE <= 0;
-      ALUSrcA <= 1;
-      ALUSrcB <= 2'd0;
-      if (funct == 6'h20) begin //add
-        ALUOP <= `ADD;
-      end else if (funct == 6'h22) begin //sub
-        ALUOP <= `SUB;
-      end else if (funct == 6'h2a) begin //slt
-        ALUOP <= `SLT;
-      end
+      ALUSrcA <= 0;
+      ALUSrcB <= 2'd1;
+      ALUOP <= `ADD;
       PCSrc <= 2'd0;
       Branch <= 0;
       BEQSel <= 0;
+      count <= 0;
     end
-    ALUWriteBack : begin
-      state <= Fetch;
+    Execute : begin
+      state <= ALUWriteBack;
       PCWE <= 0;
       IorD <= 0;
       MemWE <= 0;
@@ -213,39 +350,59 @@ begin
       Branch <= 0;
       BEQSel <= 0;
     end
-    BEQ : begin
+    ALUWriteBack : begin
       state <= Fetch;
-      PCWE <= 0;
+      PCWE <= 1;
       IorD <= 0;
       MemWE <= 0;
-      IRWrite <= 0;
+      IRWrite <= 1;
       RegDest <= 2'd0;
       RegSr <= 1;
       MemToReg <= 2'd0;
       RegWE <= 0;
-      ALUSrcA <= 1;
-      ALUSrcB <= 2'd0;
-      ALUOP <= `SUB;
-      PCSrc <= 2'd1;
-      Branch <= 1;
+      ALUSrcA <= 0;
+      ALUSrcB <= 2'd1;
+      ALUOP <= `ADD;
+      PCSrc <= 2'd0;
+      Branch <= 0;
       BEQSel <= 0;
+      count <= 0;
+    end
+    BEQ : begin
+      state <= Fetch;
+      PCWE <= 1;
+      IorD <= 0;
+      MemWE <= 0;
+      IRWrite <= 1;
+      RegDest <= 2'd0;
+      RegSr <= 1;
+      MemToReg <= 2'd0;
+      RegWE <= 0;
+      ALUSrcA <= 0;
+      ALUSrcB <= 2'd1;
+      ALUOP <= `ADD;
+      PCSrc <= 2'd0;
+      Branch <= 0;
+      BEQSel <= 0;
+      count <= 0;
     end
     BNE : begin
       state <= Fetch;
-      PCWE <= 0;
+      PCWE <= 1;
       IorD <= 0;
       MemWE <= 0;
-      IRWrite <= 0;
+      IRWrite <= 1;
       RegDest <= 2'd0;
       RegSr <= 1;
       MemToReg <= 2'd0;
       RegWE <= 0;
-      ALUSrcA <= 1;
-      ALUSrcB <= 2'd0;
-      ALUOP <= `SUB;
-      PCSrc <= 2'd1;
-      Branch <= 1;
-      BEQSel <= 1;
+      ALUSrcA <= 0;
+      ALUSrcB <= 2'd1;
+      ALUOP <= `ADD;
+      PCSrc <= 2'd0;
+      Branch <= 0;
+      BEQSel <= 0;
+      count <= 0;
     end
     ADDIExecute : begin
       state <= ADDIWriteBack;
@@ -256,27 +413,6 @@ begin
       RegDest <= 2'd0;
       RegSr <= 1;
       MemToReg <= 2'd0;
-      RegWE <= 0;
-      ALUSrcA <= 1;
-      ALUSrcB <= 2'd2;
-      if (opcode == 6'h8) begin
-        ALUOP <= `ADD;
-      end else if (opcode == 6'he) begin
-        ALUOP <= `XOR;
-      end
-      PCSrc <= 2'd0;
-      Branch <= 0;
-      BEQSel <= 0;
-    end
-    ADDIWriteBack : begin
-      state <= Fetch;
-      PCWE <= 0;
-      IorD <= 0;
-      MemWE <= 0;
-      IRWrite <= 0;
-      RegDest <= 2'd0;
-      RegSr <= 1;
-      MemToReg <= 2'd0;
       RegWE <= 1;
       ALUSrcA <= 0;
       ALUSrcB <= 2'd0;
@@ -284,9 +420,64 @@ begin
       PCSrc <= 2'd0;
       Branch <= 0;
       BEQSel <= 0;
+      count <= 0;
+    end
+    ADDIWriteBack : begin
+      state <= Fetch;
+      PCWE <= 1;
+      IorD <= 0;
+      MemWE <= 0;
+      IRWrite <= 1;
+      RegDest <= 2'd0;
+      RegSr <= 1;
+      MemToReg <= 2'd0;
+      RegWE <= 0;
+      ALUSrcA <= 0;
+      ALUSrcB <= 2'd1;
+      ALUOP <= `ADD;
+      PCSrc <= 2'd0;
+      Branch <= 0;
+      BEQSel <= 0;
+      count <= 0;
     end
     Jump : begin
       state <= Fetch;
+      PCWE <= 1;
+      IorD <= 0;
+      MemWE <= 0;
+      IRWrite <= 1;
+      RegDest <= 2'd0;
+      RegSr <= 1;
+      MemToReg <= 2'd0;
+      RegWE <= 0;
+      ALUSrcA <= 0;
+      ALUSrcB <= 2'd1;
+      ALUOP <= `ADD;
+      PCSrc <= 2'd0;
+      Branch <= 0;
+      BEQSel <= 0;
+      count <= 0;
+    end
+    JR : begin
+      state <= Fetch;
+      PCWE <= 1;
+      IorD <= 0;
+      MemWE <= 0;
+      IRWrite <= 1;
+      RegDest <= 2'd0;
+      RegSr <= 1;
+      MemToReg <= 2'd0;
+      RegWE <= 0;
+      ALUSrcA <= 0;
+      ALUSrcB <= 2'd1;
+      ALUOP <= `ADD;
+      PCSrc <= 2'd0;
+      Branch <= 0;
+      BEQSel <= 0;
+      count <= 0;
+    end
+    JALWriteBack : begin
+      state <= JALJump;
       PCWE <= 1;
       IorD <= 0;
       MemWE <= 0;
@@ -299,40 +490,6 @@ begin
       ALUSrcB <= 2'd0;
       ALUOP <= `ADD;
       PCSrc <= 2'd2;
-      Branch <= 0;
-      BEQSel <= 0;
-    end
-    JR : begin
-      state <= Fetch;
-      PCWE <= 1;
-      IorD <= 0;
-      MemWE <= 0;
-      IRWrite <= 0;
-      RegDest <= 2'd0;
-      RegSr <= 0;
-      MemToReg <= 2'd0;
-      RegWE <= 0;
-      ALUSrcA <= 0;
-      ALUSrcB <= 2'd0;
-      ALUOP <= `ADD;
-      PCSrc <= 2'd3;
-      Branch <= 0;
-      BEQSel <= 0;
-    end
-    JALWriteBack : begin
-      state <= JALJump;
-      PCWE <= 0;
-      IorD <= 0;
-      MemWE <= 0;
-      IRWrite <= 0;
-      RegDest <= 2'd2;
-      RegSr <= 1;
-      MemToReg <= 2'd2;
-      RegWE <= 1;
-      ALUSrcA <= 0;
-      ALUSrcB <= 2'd0;
-      ALUOP <= `ADD;
-      PCSrc <= 2'd0;
       Branch <= 0;
       BEQSel <= 0;
     end
@@ -341,17 +498,18 @@ begin
       PCWE <= 1;
       IorD <= 0;
       MemWE <= 0;
-      IRWrite <= 0;
+      IRWrite <= 1;
       RegDest <= 2'd0;
       RegSr <= 1;
       MemToReg <= 2'd0;
       RegWE <= 0;
       ALUSrcA <= 0;
-      ALUSrcB <= 2'd0;
+      ALUSrcB <= 2'd1;
       ALUOP <= `ADD;
-      PCSrc <= 2'd2;
+      PCSrc <= 2'd0;
       Branch <= 0;
       BEQSel <= 0;
+      count <= 0;
     end
   endcase
 end
