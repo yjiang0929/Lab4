@@ -259,7 +259,11 @@ begin
       RegWE <= 0;
       ALUSrcA <= 1;
       ALUSrcB <= 2'd2;
-      ALUOP <= `ADD;
+      if (opcode == 6'h8) begin
+        ALUOP <= `ADD;
+      end else if (opcode == 6'he) begin
+        ALUOP <= `XOR;
+      end
       PCSrc <= 2'd0;
       Branch <= 0;
       BEQSel <= 0;
