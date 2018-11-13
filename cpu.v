@@ -58,7 +58,7 @@ module cpu(
     .IRWrite(IRWrite), .RegSr(RegSrc), .RegWE(RegWE), .ALUSrcA(ALUSrcA), .Branch(Branch), .BEQSel(BEQSel),
     .ALUOP(ALUOP), .RegDest(RegDest), .MemToReg(MemToReg), .ALUSrcB(ALUSrcB), .PCSrc(PCSrc));
 
-  mux2 iOrDmux(.in1(pc), .in2(aluClk), .out(IorDout), .select(IorD));
+  mux2 iOrDmux(.in1({2'b0, pc[31:2]}), .in2(aluClk), .out(IorDout), .select(IorD));
 
   dataMemory dm(.clk(clk), .regWE(MemWE), .dataAddr(IorDout[9:0]), .dataIn(dbClk), .dataOut(dmOut));
 
