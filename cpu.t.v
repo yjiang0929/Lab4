@@ -17,6 +17,7 @@ module testCPU();
   wire[31:0] test_3 = 32'd42; //test 4
   wire[31:0] slt = 32'd1; //test 5
 
+  //Simple tests
   wire[31:0] branch_test = 32'd4; //test 6
   wire[31:0] jump_test = 32'd8; //test 7
   wire[31:0] simple_sl = 32'd3; //test 8
