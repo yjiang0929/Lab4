@@ -43,8 +43,8 @@ module cpu(
 
 
 	// These are driven by the decoder
-	wire PCWE, MemWE, IRWrite, RegWE, Branch, BEQSel, IorD, ALUSrcA, PCSrc;
-  wire[1:0] RegDest, MemToReg, ALUSrcB;
+	wire PCWE, MemWE, IRWrite, RegWE, Branch, BEQSel, IorD, ALUSrcA;
+  wire[1:0] RegDest, MemToReg, ALUSrcB, PCSrc;
   wire[2:0] ALUOP;
   //Mux controllers
   wire RegSrc;
@@ -68,7 +68,7 @@ module cpu(
 
   mux3 memToRegmux(.in1(aluClk), .in2(dataClk), .in3(aluRes), .out(Dw), .select(MemToReg)); //aluRES = pc + 4
 
-  regfile rf(.ReadData1(Da), .ReadData2(Db), .WriteData(Dw), .ReadRegister1(regIn1), .ReadRegister2(regIn2), .WriteRegister(regIn3), .regWrite(RegWE), .clk(clk));
+  regfile rf(.ReadData1(Da), .ReadData2(Db), .WriteData(Dw), .ReadRegister1(regIn1), .ReadRegister2(regIn2), .WriteRegister(regIn3), .RegWrite(RegWE), .Clk(clk));
 
   mux2 aluSrcAmux(.in1(pc), .in2(daClk), .out(srcA), .select(ALUSrcA));
 

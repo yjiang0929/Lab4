@@ -12,8 +12,8 @@
 
 module fsm (
 input clk,
-input opcode,
-input funct,
+input [5:0] opcode,
+input [5:0] funct,
 output reg PCWE, IorD, MemWE, IRWrite, RegSr,
 output reg RegWE, ALUSrcA, Branch, BEQSel,
 output reg [2:0] ALUOP,
