@@ -23,7 +23,7 @@ module testCPU();
   wire[31:0] simple_sl = 32'd3; //test 8
   wire[31:0] simple_test = 32'd4; //test 9
   wire[31:0] slt_test = 32'd1; //test 10
-  wire[31:0] sw_test = 32'd13; //test 11
+  wire[31:0] sw_test = 32'h13; //test 11
 
   //Instantiate dut
   cpu dut(.clk(clk));
