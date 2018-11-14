@@ -62,12 +62,12 @@ always #100 clk=!clk;
     $dumpfile(file_out);
     $dumpvars();
 
-    $display("Starting test number (in binary): %b or%d", test_num, test_num);
+    $display("Starting test number (in binary): %b or %d", test_num, test_num);
 
 
     //Note beginning of test
     begintest = 1;
-    #20000;  //Wait a while to let the CPU do as it needs to
+    #100000;  //Wait a while to let the CPU do as it needs to
     dutpassed = 1;
 
     if(test_num == 0) begin //If we're test 0, check it against "hanoi"
