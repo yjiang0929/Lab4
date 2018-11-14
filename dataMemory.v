@@ -1,6 +1,5 @@
 // Data memory, with automatic initialization
 // Credit: Ben Hill, mostly
-// Three ports: dataIn (write), dataOut (read), cmdOut (read)
 // dataIn and dataOut share an address
 
 module dataMemory
@@ -18,7 +17,6 @@ module dataMemory
       mem[dataAddr] <= dataIn;
     end
   end
-  integer idx;
 
 
   assign dataOut = mem[dataAddr]; // Data output
