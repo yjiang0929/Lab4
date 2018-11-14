@@ -17,4 +17,4 @@ echo "Running tests with verbose outputs (testing entire cpu)."
 ./scripted_tests.sh
 
 echo "Removing test files."
-rm alutest decodertest muxtest regfiletest signExttest cputest
+rm alutest muxtest regfiletest signExttest cputest

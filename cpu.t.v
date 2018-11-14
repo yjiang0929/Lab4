@@ -67,7 +67,7 @@ always #100 clk=!clk;
 
     //Note beginning of test
     begintest = 1;
-    #100000;  //Wait a while to let the CPU do as it needs to
+    #10000000;  //Wait a while to let the CPU do as it needs to
     dutpassed = 1;
 
     if(test_num == 0) begin //If we're test 0, check it against "hanoi"
