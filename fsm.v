@@ -237,7 +237,7 @@ begin
           MemToReg <= 2'd2;
           RegWE <= 1;
           ALUSrcA <= 0;
-          ALUSrcB <= 2'd0;
+          ALUSrcB <= 2'd1;
           ALUOP <= `ADD;
           PCSrc <= 2'd0;
           Branch <= 0;
