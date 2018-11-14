@@ -441,7 +441,7 @@ begin
       count <= 0;
     end
     Jump : begin
-      state <= Fetch;
+      state <= Decode;
       PCWE <= 1;
       IorD <= 0;
       MemWE <= 0;
@@ -459,7 +459,7 @@ begin
       count <= 0;
     end
     JR : begin
-      state <= Fetch;
+      state <= Decode;
       PCWE <= 1;
       IorD <= 0;
       MemWE <= 0;
@@ -494,8 +494,8 @@ begin
       BEQSel <= 0;
     end
     JALJump : begin
-      state <= Fetch;
-      PCWE <= 1;
+      state <= Decode;
+      PCWE <= 0;
       IorD <= 0;
       MemWE <= 0;
       IRWrite <= 1;
