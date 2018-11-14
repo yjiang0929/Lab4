@@ -1,23 +1,10 @@
-# Lab4
-Repository for Comp Arch Lab4
+# Lab4: Multi Cycle CPU
+#### Yichen Jiang, March Saper, Nick Sherman
 
-## Work Plan
-We are planning on making a multi-cycle CPU for lab 4. 
+In this lab we constructed a 32-bit multi cycle CPU with functionalities LW, SW, J, JR, JAL, BEQ, BNE, XORI, ADDI, ADD, SUB, and SLT. 
 
-Deliverables:
-Block diagram
-Unit test benches for cpu, decoder, and any new components created
-Assembly tests for final CPU
-Necessary script(s) for running all the tests
-
-Workplan: The Lab will take two weeks to complete. We will finish the block diagram and do a midpoint check in with Ben in the first week (targeting Friday), and implement and test our design in the second week.
-
-Work distribution:
-The block diagram is going to be completed with all members working together from Monday-Thursday
-From the block diagram we will determine the submodules we must make and corresponding unit tests. We will complete these over the weekend and divide evenly. 
-We will try to hook up our CPU on Monday/Tuesday to allow buffer time to write new assembly tests and scripts.
-We will write new assembly tests to verify unit functionality on Monday/Tuesday as we create the completed CPU and spend the remaining time debugging.
-
-
-Resources:
-The class slides will be the most useful when determining how we structure our multi-cycle CPU. We will also be relying on the prior lab work for core components of the CPU and associated test benches.
+#### How to run
+This runs our more complex assembly tests including Hanoi and Fibonacci.
+```
+./full_test_runner.sh
+```
