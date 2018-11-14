@@ -39,17 +39,17 @@ parameter JALJump = 5'd15;
 
 // state variables
 reg[4:0] state;
-reg count;
+reg count; //Decode takes one extra clock cycle to complete
 
-// map state to output
+// map state to flags
 always @ (posedge clk)
 begin
-  if (state === 5'dx) begin
+  if (state === 5'dx) begin //cold start
     state <= Fetch;
   end
   case(state)
     Fetch : begin
-      if (opcode === 6'dx) begin
+      if (opcode === 6'dx) begin //cold start
         state <= Fetch;
         PCWE <= 1;
         IorD <= 0;
