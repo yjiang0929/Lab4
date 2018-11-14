@@ -15,6 +15,8 @@ echo "Running tests with quiet outputs unless incorrect."
 ./signExttest
 echo "Running tests with verbose outputs (testing entire cpu)."
 ./scripted_tests.sh
+echo "Running singular CPU commands."
+./cpucmds.sh
 
 echo "Removing test files."
 rm alutest muxtest regfiletest signExttest cputest
