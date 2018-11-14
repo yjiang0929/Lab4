@@ -442,7 +442,7 @@ begin
     end
     Jump : begin
       state <= Decode;
-      PCWE <= 1;
+      PCWE <= 0;
       IorD <= 0;
       MemWE <= 0;
       IRWrite <= 1;
@@ -460,7 +460,7 @@ begin
     end
     JR : begin
       state <= Decode;
-      PCWE <= 1;
+      PCWE <= 0;
       IorD <= 0;
       MemWE <= 0;
       IRWrite <= 1;
