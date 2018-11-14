@@ -133,7 +133,7 @@ always #100 clk=!clk;
     end
     if(test_num== 6) begin
       if(dut.rf.reg2.qout != branch_test) begin
-      $display("Test failed: branch_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: branch_test answer unexpected; expected %b but got %b", branch_test, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
@@ -143,7 +143,7 @@ always #100 clk=!clk;
     end
     if(test_num== 7) begin
       if(dut.rf.reg2.qout != jump_test) begin
-      $display("Test failed: jump_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: jump_test answer unexpected; expected %b but got %b", jump_test, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
@@ -153,7 +153,7 @@ always #100 clk=!clk;
     end
     if(test_num== 8) begin
       if(dut.rf.reg2.qout != simple_sl) begin
-      $display("Test failed: simple_sl answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: simple_sl answer unexpected; expected %b but got %b", simple_sl, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
@@ -163,7 +163,7 @@ always #100 clk=!clk;
     end
     if(test_num== 9) begin
       if(dut.rf.reg2.qout != simple_test) begin
-      $display("Test failed: simple_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: simple_test answer unexpected; expected %b but got %b", simple_test, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
@@ -173,7 +173,7 @@ always #100 clk=!clk;
     end
     if(test_num== 10) begin
       if(dut.rf.reg2.qout != slt_test) begin
-      $display("Test failed: slt_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: slt_test answer unexpected; expected %b but got %b", test_num, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
@@ -183,7 +183,7 @@ always #100 clk=!clk;
     end
     if(test_num== 11) begin
       if(dut.rf.reg2.qout != sw_test) begin
-      $display("Test failed: sw_test answer unexpected; expected %b but got %b", slt, dut.rf.reg2.qout);
+      $display("Test failed: sw_test answer unexpected; expected %b but got %b", sw_test, dut.rf.reg2.qout);
       dutpassed = 0;
       end
       if(dut.rf.reg2.qout===32'bX) begin
