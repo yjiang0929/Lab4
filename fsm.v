@@ -174,7 +174,7 @@ begin
           PCSrc <= 2'd1;
           Branch <= 1;
           BEQSel <= 0;
-        end else if (opcode == 6'h8) begin //addi
+        end else if (opcode == 6'h8 || opcode == 6'he) begin //addi+xori
           state <= ADDIExecute;
           PCWE <= 0;
           IorD <= 0;
